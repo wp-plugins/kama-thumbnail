@@ -117,6 +117,10 @@ Result:
 <?php echo kama_thumb_img("w=150 &h=100 &post_id=50"); ?>
 `
 
+== Screenshots ==
+
+1. Setting block on standart "Media" admin page.
+
 
 == Frequently Asked Questions ==
 Comming soon...
