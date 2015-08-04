@@ -26,7 +26,7 @@ Using the code in the loop you will get ready thumbnail IMG tag. Plugin takes po
 You can make thumbs from custom URL, like this:
 `<?php echo kama_thumb_img('w=150 &h=150 &src=URL_TO_IMG'); ?>`
 
-URL_TO_IMG must be from local server: plugin don't work with external images, because of security.
+`URL_TO_IMG` must be from local server: plugin don't work with external images, because of security.
 
 After install use this functions in code:
 
@@ -61,16 +61,15 @@ kama_thumb_img( array(
 ) );
 `
 
-* 2. You can set only one side: width | height, then other side became proportional.
+* 2. You can set only one side: `width` | `height`, then other side became proportional.
 * 3. `src` parameter is for cases when you need create thumb from any image not image of WordPress post.
 * 4. For test is there image for post, use this code:
 `
-$img = kama_thumb_img('w=150&h=150&no_stub');
-if( ! $img )
-	echo 'Картинки нет';
+if( ! $$img = kama_thumb_img('w=150&h=150&no_stub') )
+	echo 'NO img';
 `
 
-### Examples ###
+## Examples ##
 #### #1 Get Thumb ####
 
 In the loop where you need the thumb 150х100:
@@ -80,7 +79,7 @@ In the loop where you need the thumb 150х100:
 `
 Result:
 `
-<img src='ссылка на миниатюру' alt='' class='alignleft myimg' width='150' height='100' />
+<img src='ссылка на миниатюру' alt='' class='alignleft myimg' width='150' height='100'>
 `
 
 #### #2 Not show stub image ####
@@ -96,7 +95,7 @@ Result: `/wp-content/cache/thumb/ec799941f_100x80.png`
 
 This url you can use like:
 `
-<img src='<?php echo kama_thumb_src('w=100 &h=80 &q=75'); ?>' alt='' />
+<img src='<?php echo kama_thumb_src('w=100 &h=80 &q=75'); ?>' alt=''>
 `
 
 #### #4 kama_thumb_a_img() function ####
@@ -105,7 +104,7 @@ This url you can use like:
 `
 Result:
 `
-<a href='ORIGINAL_URL'><img src='THUMB_URL' alt='' class='alignleft myimg' width='150' height='100' /></a>
+<a href='ORIGINAL_URL'><img src='THUMB_URL' alt='' class='alignleft myimg' width='150' height='100'></a>
 `
 
 #### #5 Thumb of any image URL (server locale) ####
