@@ -9,7 +9,7 @@ Description: Создает миниатюры постов на лету и к�
 __Plugin URI: http://wp-kama.ru/?p=142
 Text Domain: kama_thumbnail
 Domain Path: lang
-Version: 1.6.5.1
+Version: 1.7
 */
 
 define('KT_DIR', dirname(__FILE__) .'/' );
@@ -28,30 +28,16 @@ function kt_classloads( $class ){
 
 //require KT_DIR .'class.Kama_Clear_Thumb.php';
 require KT_DIR .'class.Kama_Thumbnail.php';
+require KT_DIR .'class.Kama_Make_Thumb.php';
 
 
 register_uninstall_hook( __FILE__, array('Kama_Thumbnail', 'uninstall') );
 register_activation_hook( __FILE__, array('Kama_Thumbnail', 'activation') );
 
 
-add_action('plugins_loaded', 'Kama_Thumbnail_load');
-function Kama_Thumbnail_load(){
-	// kt init
-	Kama_Thumbnail::instance()->wp_init();
-	
-	// l10n
-	$locale = get_locale();
-	if( $locale != 'ru_RU' ){
-		$patt   = KT_DIR . 'lang/kama_thumbnail-%s.mo';
-		$mofile = sprintf( $patt, $locale );
-		if( ! file_exists( $mofile ) )
-			$mofile = sprintf( $patt, 'en_US' );
+add_action('plugins_loaded', create_function('','new Kama_Thumbnail();') );
 
-		load_textdomain('kama_thumbnail', $mofile );
-	}
-}
-
-## локализация
+## l10n
 function __kt( $text ){ 
 	return __( $text, 'kama_thumbnail');
 }
@@ -66,23 +52,20 @@ function __kt( $text ){
  * post_id - идентификатор поста, чтобы правильно получить произвольное поле с картинкой.
  */
 # вернет только ссылку
-function kama_thumb_src( $args = ''){
-	$kt = Kama_Thumbnail::instance();
-	$kt->set_args( $args );
+function kama_thumb_src( $args = '' ){
+	$kt = new Kama_Make_Thumb( $args );
 	return $kt->src();
 }
 
 # вернет картинку (готовый тег img)
-function kama_thumb_img( $args=''){
-	$kt = Kama_Thumbnail::instance();
-	$kt->set_args( $args );
+function kama_thumb_img( $args='' ){
+	$kt = new Kama_Make_Thumb( $args );
 	return $kt->img();
 }
 
 # вернет ссылку-картинку
-function kama_thumb_a_img( $args=''){
-	$kt = Kama_Thumbnail::instance();
-	$kt->set_args( $args );
+function kama_thumb_a_img( $args='' ){
+	$kt = new Kama_Make_Thumb( $args );
 	return $kt->a_img();
 }
 
