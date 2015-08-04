@@ -19,41 +19,41 @@ class Kama_Make_Thumb{
 	
 	# Берем ссылку на картинку из произвольного поля, или из текста, создаем произвольное поле.
 	# Если в тексте нет картинки, ставим заглушку no_photo
-	private function get_img_url_and_write_postmeta(){
+	private function get_src_and_set_postmeta(){
 		global $post, $wpdb;
 		
-		$pID = (int) ( $this->post_id ? $this->post_id : $post->ID );
+		$post_id = (int) ( $this->post_id ?: $post->ID );
 
-		if( $src = get_post_meta( $pID, $this->opt->meta_key, true ) )
+		if( $src = get_post_meta( $post_id, $this->opt->meta_key, true ) )
 			return $src;
 
 		// проверяем наличие стандартной миниатюры
-		if( $_thumbnail_id = get_post_meta( $pID, '_thumbnail_id', true ) )
+		if( $_thumbnail_id = get_post_meta( $post_id, '_thumbnail_id', true ) )
 			$src = wp_get_attachment_url( (int) $_thumbnail_id );
 		
 		// получаем ссылку из контента
 		if( ! $src ){
-			$content = ( $this->post_id ) ? $wpdb->get_var( "SELECT post_content FROM {$wpdb->posts} WHERE ID = {$pID} LIMIT 1" ) : $post->post_content;
+			$content = ( $this->post_id ) ? $wpdb->get_var( "SELECT post_content FROM {$wpdb->posts} WHERE ID = {$post_id} LIMIT 1" ) : $post->post_content;
 			$src = $this->get_url_from_text( $content );
 		}
 		
 		// получаем ссылку из вложений - первая картинка
 		if( ! $src ){
 			$attch_img = get_children( array(
-				'numberposts' => 1,
+				'numberposts'    => 1,
 				'post_mime_type' => 'image',
-				'post_parent' => $pID,
-				'post_type' => 'attachment'
+				'post_parent'    => $post_id,
+				'post_type'      => 'attachment'
 			) );
 			$attch_img = array_shift( $attch_img );
 			if( $attch_img )
 				$src = wp_get_attachment_url( $attch_img->ID );
 		}
 
-		// добавим заглушку no-photo, чтобы постоянно не проверять
+		// добавим заглушку no_photo, чтобы постоянно не проверять
 		if( ! $src ) $src = 'no_photo';
 		
-		update_post_meta( $pID, $this->opt->meta_key, $src, true );
+		update_post_meta( $post_id, $this->opt->meta_key, $src );
 		
 		return $src;
 	}
@@ -91,7 +91,7 @@ class Kama_Make_Thumb{
 	function do_thumbnail(){
 		// если не передана ссылка, то ищем её в контенте и записываем пр.поле
 		if( ! $this->src ) 
-			$this->src = $this->get_img_url_and_write_postmeta();
+			$this->src = $this->get_src_and_set_postmeta();
 		
 		// проверяем нужна ли картинка заглушка
 		if( $this->src == 'no_photo'){
@@ -124,8 +124,7 @@ class Kama_Make_Thumb{
 			return $out_link;
 		
 		if( ! $this->__cache_folder_check() ){
-			$this->show_message( __kt('Директории для создания миниатюр не существует. Создайте её: '. $this->opt->cache_folder ), 'error');
-			return;
+			return Kama_Thumbnail::show_message( __kt('Директории для создания миниатюр не существует. Создайте её: '. $this->opt->cache_folder ), 'error');
 		}
 		
 		// Если физически файл не существует (бывает файла пропадет после переезда на новый хости или работ над сайтом).

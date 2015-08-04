@@ -82,7 +82,7 @@ class Kama_Thumbnail{
 		
 	## Удалет произвольное поле со ссылкой при обновлении поста, чтобы создать его снова
 	function clear_post_meta( $post_id ){
-		delete_post_meta( $post_id, self::$opt->meta_key );
+		update_post_meta( $post_id, self::$opt->meta_key, '' );
 	}
 	
 	
@@ -101,7 +101,7 @@ class Kama_Thumbnail{
 	}
 	
 	## для вывода сообещний в админке
-	function show_message( $text = '', $class = 'updated' ){
+	static function show_message( $text = '', $class = 'updated' ){
 		$code = <<<CODE
 	echo '<div id="message" class="$class notice is-dismissible"><p>$text</p></div>';	
 CODE;
@@ -136,12 +136,12 @@ CODE;
 		$out = '';
 		
 		$out .= '
-		<input type="text" name="'. $opt_name .'[cache_folder]" value="'. $opt->cache_folder .'" style="width:100%;"><br>
-		'. __kt('Полный путь до папки кэша с правами 755 и выше. По умолчанию: не установлено. Текущий:') .' <code>'. $this->opt->cache_folder .'</code>
+		<input type="text" name="'. $opt_name .'[cache_folder]" value="'. $opt->cache_folder .'" style="width:100%;" placeholder="'. $this->opt->cache_folder .'"><br>
+		'. __kt('Полный путь до папки кэша с правами 755 и выше. По умолчанию: не установлено.') .'
 		<br><br>
 		
-		<input type="text" name="'. $opt_name .'[no_photo_url]" value="'. $opt->no_photo_url .'" style="width:100%;"><br>
-		'. __kt('УРЛ картинки заглушки. По умолчанию: не установлено. Текущий:') .' <code>'. $this->opt->no_photo_url .'</code>
+		<input type="text" name="'. $opt_name .'[no_photo_url]" value="'. $opt->no_photo_url .'" style="width:100%;" placeholder="'. $this->opt->no_photo_url .'"><br>
+		'. __kt('УРЛ картинки заглушки. По умолчанию: не установлено.') .'
 		<br><br>
 		
 		<input type="text" name="'. $opt_name .'[meta_key]" value="'. $opt->meta_key .'" style="width:100%;"><br>
@@ -210,7 +210,7 @@ CODE;
 
 	function clear_cache(){
 		if( ! $cache_dir = self::$opt->cache_folder ){
-			$this->show_message( __kt('Путь до папки кэша не установлен в настройках.'), 'error');
+			self::show_message( __kt('Путь до папки кэша не установлен в настройках.'), 'error');
 			return false;
 		}
 		
@@ -218,20 +218,20 @@ CODE;
 
 		foreach( glob($cache_dir .'/*') as $obj ) unlink($obj);
 		
-		$this->show_message( __kt('Кэш <b>Kama Thumbnail</b> был очищен.') );
+		self::show_message( __kt('Кэш <b>Kama Thumbnail</b> был очищен.') );
 		
 		return true;
 	}
 
 	function del_customs(){
 		global $wpdb;
-		if( ! $kt_meta_key = self::$opt->meta_key )
-			return $this->show_message('meta_key option not set.', 'error');
+		if( ! self::$opt->meta_key )
+			return self::show_message('meta_key option not set.', 'error');
 			
 		if( $wpdb->delete( $wpdb->postmeta, array('meta_key'=>self::$opt->meta_key ) ) )
-			$this->show_message( sprintf( __kt('Все произвольные поля <code>%s</code> были удалены.'), $kt_meta_key ) );
+			self::show_message( sprintf( __kt('Все произвольные поля <code>%s</code> были удалены.'), self::$opt->meta_key ) );
 		else
-			$this->show_message( sprintf( __kt('Не удалось удалить произвольные поля <code>%s</code>'), $kt_meta_key ) );
+			self::show_message( sprintf( __kt('Не удалось удалить произвольные поля <code>%s</code>'), self::$opt->meta_key ) );
 
 		return;
 	}

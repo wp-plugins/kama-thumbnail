@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Kama_Thumbnail\n"
-"POT-Creation-Date: 2015-08-04 19:22+0500\n"
-"PO-Revision-Date: 2015-08-04 19:23+0500\n"
+"POT-Creation-Date: 2015-08-04 19:45+0500\n"
+"PO-Revision-Date: 2015-08-04 19:47+0500\n"
 "Last-Translator: \n"
 "Language-Team: Kama <tkama@bk.ru>\n"
 "Language: en_US\n"
@@ -34,14 +34,12 @@ msgstr "Remove Releted Custom Fields"
 
 #: class.Kama_Thumbnail.php:140
 msgid ""
-"Полный путь до папки кэша с правами 755 и выше. По умолчанию: не "
-"установлено. Текущий:"
-msgstr ""
-"Full path to cache folder with 755 access rule. Default: not set. Current:"
+"Полный путь до папки кэша с правами 755 и выше. По умолчанию: не установлено."
+msgstr "Full path to cache folder with 755 access rule. Default: NO."
 
 #: class.Kama_Thumbnail.php:144
-msgid "УРЛ картинки заглушки. По умолчанию: не установлено. Текущий:"
-msgstr "URL to dummy image. Default: not set. Current:"
+msgid "УРЛ картинки заглушки. По умолчанию: не установлено."
+msgstr "URL to dummy image. Default: NO."
 
 #: class.Kama_Thumbnail.php:148
 msgid ""
@@ -109,6 +107,15 @@ msgstr ""
 "code use next functions: <code>kama_thumb_a_img(\"w=200 &h=100\")</code>, "
 "<code>kama_thumb_img(\"w=200 &h=100\")</code>, <code>kama_thumb_src(\"w=200 "
 "&h=100\")</code>."
+
+#~ msgid ""
+#~ "Полный путь до папки кэша с правами 755 и выше. По умолчанию: не "
+#~ "установлено. Текущий:"
+#~ msgstr ""
+#~ "Full path to cache folder with 755 access rule. Default: not set. Current:"
+
+#~ msgid "УРЛ картинки заглушки. По умолчанию: не установлено. Текущий:"
+#~ msgstr "URL to dummy image. Default: not set. Current:"
 
 #~ msgid ""
 #~ "Создает миниатюры постов на лету и кэширует результат. Из какой картинки "
