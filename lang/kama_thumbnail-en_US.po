@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Kama_Thumbnail\n"
-"POT-Creation-Date: 2015-08-04 17:32+0500\n"
-"PO-Revision-Date: 2015-08-04 17:37+0500\n"
+"POT-Creation-Date: 2015-08-04 19:22+0500\n"
+"PO-Revision-Date: 2015-08-04 19:23+0500\n"
 "Last-Translator: \n"
 "Language-Team: Kama <tkama@bk.ru>\n"
 "Language: en_US\n"
@@ -16,52 +16,52 @@ msgstr ""
 "X-Poedit-KeywordsList: __kt\n"
 "X-Poedit-SearchPath-0: .\n"
 
-#: class.Kama_Thumbnail.php:192
+#: class.Kama_Make_Thumb.php:127
 msgid "Директории для создания миниатюр не существует. Создайте её: "
 msgstr "Dir for create thumbs isn't exists. Create it:"
 
-#: class.Kama_Thumbnail.php:440
+#: class.Kama_Thumbnail.php:113
 msgid "Настройки Kama Thumbnail"
 msgstr "Kama Thumbnail Settings"
 
-#: class.Kama_Thumbnail.php:445
+#: class.Kama_Thumbnail.php:118
 msgid "Очистить кеш картинок"
 msgstr "Clear Thumb Cache"
 
-#: class.Kama_Thumbnail.php:446
+#: class.Kama_Thumbnail.php:119
 msgid "Удалить произвольные поля"
 msgstr "Remove Releted Custom Fields"
 
-#: class.Kama_Thumbnail.php:467
+#: class.Kama_Thumbnail.php:140
 msgid ""
 "Полный путь до папки кэша с правами 755 и выше. По умолчанию: не "
 "установлено. Текущий:"
 msgstr ""
 "Full path to cache folder with 755 access rule. Default: not set. Current:"
 
-#: class.Kama_Thumbnail.php:471
+#: class.Kama_Thumbnail.php:144
 msgid "УРЛ картинки заглушки. По умолчанию: не установлено. Текущий:"
 msgstr "URL to dummy image. Default: not set. Current:"
 
-#: class.Kama_Thumbnail.php:475
+#: class.Kama_Thumbnail.php:148
 msgid ""
 "Название произвольного поля, куда будет записываться УРЛ миниатюры. По "
 "умолчанию:"
 msgstr "Custom field key, where the thumb URL will be. Default:"
 
-#: class.Kama_Thumbnail.php:479
+#: class.Kama_Thumbnail.php:152
 msgid "Качество создаваемых миниатюр от 0 до 100. По умолчанию:"
 msgstr "Quality of creating thumbs from 0 to 100. Default:"
 
-#: class.Kama_Thumbnail.php:483
+#: class.Kama_Thumbnail.php:156
 msgid "Не показывать картинку-заглушку."
 msgstr "Don't show dummy image."
 
-#: class.Kama_Thumbnail.php:487
+#: class.Kama_Thumbnail.php:160
 msgid "Автоматическая очистка папки кэша каждые 7 дней."
 msgstr "Clear cache automaticaly every 7 days."
 
-#: class.Kama_Thumbnail.php:491
+#: class.Kama_Thumbnail.php:164
 msgid ""
 "Искать класс <code>mini</code> у картинки в тексте поста и сделать из нее "
 "миниатюру по указанным у нее размерам."
@@ -69,17 +69,27 @@ msgstr ""
 "Find class <code>mini</code>in IMG in the text of post & make thumb of it by "
 "its parameters."
 
-#: class.Kama_Thumbnail.php:500
+#: class.Kama_Thumbnail.php:173
 msgid "Настройки"
 msgstr "Settings"
 
-#: class.Kama_Thumbnail.php:551
+#: class.Kama_Thumbnail.php:213
 msgid "Путь до папки кэша не установлен в настройках."
 msgstr "Path to cache not set."
 
-#: class.Kama_Thumbnail.php:559
+#: class.Kama_Thumbnail.php:221
 msgid "Кэш <b>Kama Thumbnail</b> был очищен."
 msgstr "<b>Kama Thumbnail</b> cache has been cleared."
+
+#: class.Kama_Thumbnail.php:232
+#, php-format
+msgid "Все произвольные поля <code>%s</code> были удалены."
+msgstr "All custom fields <code>%s</code> was deleted."
+
+#: class.Kama_Thumbnail.php:234
+#, php-format
+msgid "Не удалось удалить произвольные поля <code>%s</code>"
+msgstr "Couldn't delete <code>%s</code> custom fields"
 
 #: kama_thumbnail.php:3
 msgid ""
