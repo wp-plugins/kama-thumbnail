@@ -30,9 +30,9 @@ URL_TO_IMG must be from local server: plugin don't work with external images, be
 
 After install use the functions in code:
 
-* kama_thumb_src( $args ) – thumb url
-* kama_thumb_img( $args ) – thumb IMG tag
-* kama_thumb_a_img( $args ) – thumb IMG tag wraped with `<a>`. A link of A will leads to original image.
+* `kama_thumb_src( $args )` – thumb url
+* `kama_thumb_img( $args )` – thumb IMG tag
+* `kama_thumb_a_img( $args )` – thumb IMG tag wraped with `<a>`. A link of A will leads to original image.
 
 All parameters the functions accepts:
 
