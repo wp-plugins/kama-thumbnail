@@ -21,7 +21,7 @@ The plugin for developers firstly, because it don't do anything after install. I
 <?php echo kama_thumb_img('w=150&h=150'); ?>
 `
 
-	Using the code in the loop you will get ready thumbnail IMG tag. Plugin takes post thumbnail image or find first image in post content, resize it and create cache, also it create custom field for the post with URL to original image. In simple words it cache all routine and in next page loads just take cache result.
+Using the code in the loop you will get ready thumbnail IMG tag. Plugin takes post thumbnail image or find first image in post content, resize it and create cache, also it create custom field for the post with URL to original image. In simple words it cache all routine and in next page loads just take cache result.
 	
 You can make thumbs from custom URL, like this:
 `<?php echo kama_thumb_img('w=150&h=150&src=URL_TO_IMG'); ?>`
