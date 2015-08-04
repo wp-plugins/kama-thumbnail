@@ -9,11 +9,11 @@ Tags: thumbnail
 
 Create any thumbnails on fly and cache result. Auto-create of post thumbs based on: WP post thumbnail or first img in post content/attachment.
 
-Super convenient way to create post thumbnails on the fly.
-
 
 == Description ==
-Easy way to create any thumbnails without server overload. The best alternative to scripts like "thumbnail.php".
+Super convenient way to create post thumbnails on the fly without server overload.
+
+The best alternative to scripts like "thumbnail.php".
 
 The plugin for developers firstly, because it don't do anything after install. In order to the plugin begin to work, you need use one of PHP function in your theme or plugin: `kama_thumb_src()`, `kama_thumb_img()`, `kama_thumb_a_img()`, like this:
 
