@@ -18,34 +18,34 @@ The best alternative to scripts like "thumbnail.php".
 The plugin for developers firstly, because it don't do anything after install. In order to the plugin begin to work, you need use one of PHP function in your theme or plugin: `kama_thumb_src()`, `kama_thumb_img()`, `kama_thumb_a_img()`, like this:
 
 `
-<?php echo kama_thumb_img('w=150&h=150'); ?>
+<?php echo kama_thumb_img('w=150 &h=150'); ?>
 `
 
 Using the code in the loop you will get ready thumbnail IMG tag. Plugin takes post thumbnail image or find first image in post content, resize it and create cache, also it create custom field for the post with URL to original image. In simple words it cache all routine and in next page loads just take cache result.
 	
 You can make thumbs from custom URL, like this:
-`<?php echo kama_thumb_img('w=150&h=150&src=URL_TO_IMG'); ?>`
+`<?php echo kama_thumb_img('w=150 &h=150 &src=URL_TO_IMG'); ?>`
 
 URL_TO_IMG must be from local server: plugin don't work with external images, because of security.
 
-After install use the functions in code:
+After install use this functions in code:
 
 * `kama_thumb_src( $args )` – thumb url
 * `kama_thumb_img( $args )` – thumb IMG tag
 * `kama_thumb_a_img( $args )` – thumb IMG tag wraped with `<a>`. A link of A will leads to original image.
 
-All parameters the functions accepts:
+Acceptable parameters of $arg:
 
-* `w | width` –  desired width (required)
-* `h | height` – desired height (required)
-* `notcrop` – set to resize image by one of the parameter: width | height.
-* `q` – jpg compression quality (Default 85. max.100)
-* `src` – URL to image. In this case plugin will not parse URL from post content.
-* `alt` – alt attr of img tag
-* `title` — title attr of img tag
-* `class` – class attr of img tag.
-* `no_stub` – don't show picture stub if there is no picture. Return empty string.
-* `post_id` - post ID. It needs when use function not from the loop. If pass the parameter plugin will exactly knows which post to process.
+* `w | width`  – (int) desired width (required)
+* `h | height` – (int) desired height (required)
+* `notcrop`    – (isset) set to resize image by one of the parameter: width | height.
+* `q`          – (int) jpg compression quality (Default 85. max.100)
+* `src`        – (str) URL to image. In this case plugin will not parse URL from post content.
+* `alt`        – (str) alt attr of img tag
+* `title`      - (str) title attr of img tag
+* `class`      – (str) class attr of img tag.
+* `no_stub`    – (isset) don't show picture stub if there is no picture. Return empty string.
+* `post_id`    - (int) post ID. It needs when use function not from the loop. If pass the parameter plugin will exactly knows which post to process.
 
 ### Notes ###
 * 1. You can pass `$args` as string or array:
