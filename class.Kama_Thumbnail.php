@@ -497,7 +497,7 @@ class Kama_Thumbnail{
 	function setting_page_link( $actions, $plugin_file ){
 		if( false === strpos( $plugin_file, basename(dirname(__FILE__)) ) ) return $actions;
 
-		$settings_link = '<a href="'. admin_url('options-media.php') .'">'. __('Настройки','kthumb') .'</a>'; 
+		$settings_link = '<a href="'. admin_url('options-media.php') .'">'. __kt('Настройки') .'</a>'; 
 		array_unshift( $actions, $settings_link );
 		
 		return $actions; 

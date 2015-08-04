@@ -1,12 +1,12 @@
 <?php
 
-__kt('Создает миниатюры постов на лету и кэширует результат. Из какой картинки создавать миниатюру плагин получает из: миниатюр WP / первая картинка в контенте / первая картинка вложение. Для использования в тексте поста задайте картинке класс "mini": <code>class="mini"</code> и укажите ширину и/или высоту картинке. В теме/плагине используйте функции: <code>kama_thumb_a_img("w=200 &h=100")</code>, <code>kama_thumb_img("w=200 &h=100")</code>, <code>kama_thumb_src("w=200 &h=100")</code>. Все аргументы: <code>src</code>, <code>post_id</code>, <code>w/width</code>, <code>h/height</code>, <code>notcrop</code>, <code>q</code>, <code>alt</code>, <code>class</code>, <code>title</code>, <code>no_stub</code>.');
+__kt('Создает миниатюры постов на лету и кэширует результат. Из какой картинки создавать миниатюру плагин получает из: миниатюр WP / первая картинка в контенте / первая картинка вложение. Для использования в тексте поста задайте картинке класс "mini": <code>class="mini"</code> и укажите ширину и/или высоту картинке. В теме/плагине используйте функции: <code>kama_thumb_a_img("w=200 &h=100")</code>, <code>kama_thumb_img("w=200 &h=100")</code>, <code>kama_thumb_src("w=200 &h=100")</code>.');
 
 /*
 Plugin Name: Kama Thumbnail
 Author: Kama 
-Description: Создает миниатюры постов на лету и кэширует результат. Из какой картинки создавать миниатюру плагин получает из: миниатюр WP / первая картинка в контенте / первая картинка вложение. Для использования в тексте поста задайте картинке класс "mini": <code>class="mini"</code> и укажите ширину и/или высоту картинке. В теме/плагине используйте функции: <code>kama_thumb_a_img("w=200 &h=100")</code>, <code>kama_thumb_img("w=200 &h=100")</code>, <code>kama_thumb_src("w=200 &h=100")</code>. Все аргументы: <code>src</code>, <code>post_id</code>, <code>w/width</code>, <code>h/height</code>, <code>notcrop</code>, <code>q</code>, <code>alt</code>, <code>class</code>, <code>title</code>, <code>no_stub</code>.
-Plugin URI: http://wp-kama.ru/?p=142
+Description: Создает миниатюры постов на лету и кэширует результат. Из какой картинки создавать миниатюру плагин получает из: миниатюр WP / первая картинка в контенте / первая картинка вложение. Для использования в тексте поста задайте картинке класс "mini": <code>class="mini"</code> и укажите ширину и/или высоту картинке. В теме/плагине используйте функции: <code>kama_thumb_a_img("w=200 &h=100")</code>, <code>kama_thumb_img("w=200 &h=100")</code>, <code>kama_thumb_src("w=200 &h=100")</code>.
+__Plugin URI: http://wp-kama.ru/?p=142
 Text Domain: kama_thumbnail
 Domain Path: lang
 Version: 1.6.5.1
