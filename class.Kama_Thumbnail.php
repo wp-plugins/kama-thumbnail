@@ -19,7 +19,7 @@ class Kama_Thumbnail{
 	
 	function wp_init(){
 		// админка
-		if( is_admin() && ! defined('ADMIN_AJAX') ){
+		if( is_admin() && ! defined('DOING_AJAX') ){
 			add_action('admin_menu', array( & $this, 'admin_options') ); // закомментируйте, чтобы убрать опции из админки
 			add_action('admin_menu', array( & $this, 'claer_handler') );
 			
@@ -34,7 +34,7 @@ class Kama_Thumbnail{
 			add_filter('the_content_rss', array( & $this, 'replece_in_content') );
 		}
 		
-		if( ! defined('ADMIN_AJAX') ){			
+		if( ! defined('DOING_AJAX') ){			
 			// l10n
 			$locale = get_locale();
 			if( $locale != 'ru_RU' ){
