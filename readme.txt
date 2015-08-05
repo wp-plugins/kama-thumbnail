@@ -126,9 +126,6 @@ Get thumb of post ID=50:
 1. Setting block on standart "Media" admin page.
 
 
-== Frequently Asked Questions ==
-Comming soon...
-
 == Installation ==
 
 ### Instalation via Admin Panel ###
@@ -142,16 +139,6 @@ Comming soon...
 3. Put `kama-thumbnail` folder from archive into opened `plugins` folder
 4. Activate the `Kama Thumbnail` in Admin plugins page
 5. Go to `Settings > Media` page to customize plugin
-
-
-
-== Screenshots ==
-Comming soon...
-
-
-
-== TODO ==
-Comming soon...
 
 
 == Changelog ==
