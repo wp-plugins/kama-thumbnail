@@ -15,6 +15,8 @@ Super convenient way to create post thumbnails on the fly without server overloa
 
 The best alternative to scripts like "thumbnail.php".
 
+### Usage ###
+
 The plugin for developers firstly, because it don't do anything after install. In order to the plugin begin to work, you need use one of PHP function in your theme or plugin: `kama_thumb_src()`, `kama_thumb_img()`, `kama_thumb_a_img()`, like this:
 
 `
@@ -69,7 +71,7 @@ if( ! $$img = kama_thumb_img('w=150&h=150&no_stub') )
 	echo 'NO img';
 `
 
-## Examples ##
+### Examples ###
 #### #1 Get Thumb ####
 
 In the loop where you need the thumb 150х100:
