@@ -102,10 +102,7 @@ class Kama_Thumbnail{
 	
 	## для вывода сообещний в админке
 	static function show_message( $text = '', $class = 'updated' ){
-		$code = <<<CODE
-	echo '<div id="message" class="$class notice is-dismissible"><p>$text</p></div>';	
-CODE;
-		add_action('admin_notices', create_function('', $code ) );
+		add_action('admin_notices', function()use($class, $text){ echo '<div id="message" class="'. $class .' notice is-dismissible"><p>'. $text .'</p></div>'; } );
 	}
 	
 	function admin_options(){

@@ -9,12 +9,13 @@ Description: Создает миниатюры постов на лету и к�
 __Plugin URI: http://wp-kama.ru/?p=142
 Text Domain: kama_thumbnail
 Domain Path: lang
-Version: 1.7
+Version: 1.7.1
 */
 
 define('KT_DIR', dirname(__FILE__) .'/' );
 define('KT_URL', plugins_url('', __FILE__) .'/' );
 
+if( ! require KT_DIR .'inc/is_php53.php' ) return;
 
 /*
 spl_autoload_register('kt_classloads'); // autoload classes
@@ -26,7 +27,6 @@ function kt_classloads( $class ){
 */
 
 
-//require KT_DIR .'class.Kama_Clear_Thumb.php';
 require KT_DIR .'class.Kama_Thumbnail.php';
 require KT_DIR .'class.Kama_Make_Thumb.php';
 
@@ -35,7 +35,9 @@ register_uninstall_hook( __FILE__, array('Kama_Thumbnail', 'uninstall') );
 register_activation_hook( __FILE__, array('Kama_Thumbnail', 'activation') );
 
 
-add_action('plugins_loaded', create_function('','new Kama_Thumbnail();') );
+add_action('plugins_loaded', function(){
+	new Kama_Thumbnail();
+} );
 
 ## l10n
 function __kt( $text ){ 

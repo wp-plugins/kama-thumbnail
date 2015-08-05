@@ -1,5 +1,5 @@
 === Plugin Name ===
-Stable tag: 1.7
+Stable tag: 1.7.1
 Tested up to: 4.2.3
 Requires at least: 2.7
 License: GPLv2 or later
@@ -155,6 +155,9 @@ Comming soon...
 
 
 == Changelog ==
+= 1.7.1 =
+* PHP lowwer then 5.3 now not supported...
+
 = 1.7 =
 * Fix: refactor - separate one class to two: "WP Plugin" & "Thumb Maker". Now code have better logic!
 
