@@ -114,7 +114,7 @@ Result:
 <?php echo kama_thumb_img('src=http://yousite.com/IMAGE_URL.jpg &w=150 &h=100 &class=alignleft'); ?>
 `
 
-** #6 Parameter post_id **
+##### #6 Parameter post_id
 Get thumb of post ID=50:
 
 `
