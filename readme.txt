@@ -34,7 +34,7 @@ After install use this functions in code:
 * `kama_thumb_img( $args )` – thumb IMG tag
 * `kama_thumb_a_img( $args )` – thumb IMG tag wraped with `<a>`. A link of A will leads to original image.
 
-Acceptable parameters of $arg:
+Acceptable parameters of `$arg`:
 
 * `w | width`  – (int) desired width (required)
 * `h | height` – (int) desired height (required)
@@ -48,7 +48,7 @@ Acceptable parameters of $arg:
 * `post_id`    - (int) post ID. It needs when use function not from the loop. If pass the parameter plugin will exactly knows which post to process.
 
 ### Notes ###
-* 1. You can pass `$args` as string or array:
+1. You can pass `$args` as string or array:
 `
 // string
 kama_thumb_img('w=200 &h=100 &alt=IMG NAME &class=aligncenter');
@@ -61,9 +61,9 @@ kama_thumb_img( array(
 ) );
 `
 
-* 2. You can set only one side: `width` | `height`, then other side became proportional.
-* 3. `src` parameter is for cases when you need create thumb from any image not image of WordPress post.
-* 4. For test is there image for post, use this code:
+2. You can set only one side: `width` | `height`, then other side became proportional.
+3. `src` parameter is for cases when you need create thumb from any image not image of WordPress post.
+4. For test is there image for post, use this code:
 `
 if( ! $$img = kama_thumb_img('w=150&h=150&no_stub') )
 	echo 'NO img';
