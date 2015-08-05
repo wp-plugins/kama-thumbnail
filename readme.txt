@@ -72,7 +72,7 @@ if( ! $$img = kama_thumb_img('w=150&h=150&no_stub') )
 `
 
 ### Examples ###
-** #1 Get Thumb **
+#### #1 Get Thumb ####
 
 In the loop where you need the thumb 150х100:
 
@@ -84,12 +84,12 @@ Result:
 <img src='ссылка на миниатюру' alt='' class='alignleft myimg' width='150' height='100'>
 `
 
-** #2 Not show stub image **
+#### #2 Not show stub image ####
 `
 <?php echo kama_thumb_img('w=150 &h=100 &no_stub'); ?>
 `
 
-** #3 Get just thumb URL **
+#### #3 Get just thumb URL ####
 `
 <?php echo kama_thumb_src('w=100&h=80'); ?>
 `
@@ -100,7 +100,7 @@ This url you can use like:
 <img src='<?php echo kama_thumb_src('w=100 &h=80 &q=75'); ?>' alt=''>
 `
 
-** #4 kama_thumb_a_img() function **
+#### #4 `kama_thumb_a_img()` function ####
 `
 <?php echo kama_thumb_a_img('w=150 &h=100 &class=alignleft myimg &q=75'); ?>
 `
@@ -109,12 +109,12 @@ Result:
 <a href='ORIGINAL_URL'><img src='THUMB_URL' alt='' class='alignleft myimg' width='150' height='100'></a>
 `
 
-** #5 Thumb of any image URL (server locale) **
+#### #5 Thumb of any image URL (server locale) ####
 `
 <?php echo kama_thumb_img('src=http://yousite.com/IMAGE_URL.jpg &w=150 &h=100 &class=alignleft'); ?>
 `
 
-##### #6 Parameter post_id
+#### #6 Parameter post_id ####
 Get thumb of post ID=50:
 
 `
