@@ -22,7 +22,7 @@ class Kama_Make_Thumb{
 	private function get_src_and_set_postmeta(){
 		global $post, $wpdb;
 		
-		$post_id = (int) ( $this->post_id ?: $post->ID );
+		$post_id = (int) ( $this->post_id ? $this->post_id : $post->ID );
 
 		if( $src = get_post_meta( $post_id, $this->opt->meta_key, true ) )
 			return $src;

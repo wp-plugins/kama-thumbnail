@@ -1,5 +1,5 @@
 === Plugin Name ===
-Stable tag: 1.7.1
+Stable tag: 1.7.2
 Tested up to: 4.2.3
 Requires at least: 2.7
 License: GPLv2 or later
@@ -142,8 +142,11 @@ Get thumb of post ID=50:
 
 
 == Changelog ==
+= 1.7.2 =
+* Back to PHP 5.2 support :(
+
 = 1.7.1 =
-* PHP lowwer then 5.3 now not supported...
+* PHP lower then 5.3 now not supported, because it's bad practice...
 
 = 1.7 =
 * Fix: refactor - separate one class to two: "WP Plugin" & "Thumb Maker". Now code have better logic!

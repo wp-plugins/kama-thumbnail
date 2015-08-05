@@ -9,7 +9,7 @@ class Kama_Thumbnail{
 	}
 		
 	function __construct(){
-		self::$opt = (object) ( get_option( self::$opt_name ) ?: self::def_options() );
+		self::$opt = (object) ( $tmp=get_option(self::$opt_name) ? $tmp : self::def_options() );
 		
 		if( ! self::$opt->no_photo_url ) self::$opt->no_photo_url = KT_URL .'no_photo.png';
 		if( ! self::$opt->cache_folder ) self::$opt->cache_folder = str_replace('\\', '/', WP_CONTENT_DIR . '/cache/thumb');
@@ -102,7 +102,8 @@ class Kama_Thumbnail{
 	
 	## для вывода сообещний в админке
 	static function show_message( $text = '', $class = 'updated' ){
-		add_action('admin_notices', function()use($class, $text){ echo '<div id="message" class="'. $class .' notice is-dismissible"><p>'. $text .'</p></div>'; } );
+		$echo = '<div id="message" class="'. $class .' notice is-dismissible"><p>'. $text .'</p></div>';
+		add_action('admin_notices', create_function('', "echo '$echo';" ) );
 	}
 	
 	function admin_options(){
