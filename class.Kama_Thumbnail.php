@@ -9,8 +9,8 @@ class Kama_Thumbnail{
 	}
 		
 	function __construct(){
-		self::$opt = (object) ( $tmp=get_option(self::$opt_name) ? $tmp : self::def_options() );
-		
+		self::$opt = (object) ( ($tmp=get_option(self::$opt_name)) ? $tmp : self::def_options() );
+
 		if( ! self::$opt->no_photo_url ) self::$opt->no_photo_url = KT_URL .'no_photo.png';
 		if( ! self::$opt->cache_folder ) self::$opt->cache_folder = str_replace('\\', '/', WP_CONTENT_DIR . '/cache/thumb');
 		
