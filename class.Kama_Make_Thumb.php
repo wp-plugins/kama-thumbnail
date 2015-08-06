@@ -78,12 +78,22 @@ class Kama_Make_Thumb{
 	## проверяем что картинка с доступного (нашего) сервера
 	private function __is_allow_host( $url ){
 		$psrc = parse_url( $url );
-		$allow_hosts = @ $this->opt->allow_hosts .','. $_SERVER['HTTP_HOST'];
+		$host = $this->__remove_www( $psrc['host'] );
+		$allow = $this->opt->allow_hosts;
+		
+		if( ! is_array($allow) )
+			$allow = preg_split('~\s*,\s*~', $allow );
+		  
+		$allow[] =  $this->__remove_www( $_SERVER['HTTP_HOST'] );
 
-		if( $psrc['host'] && (false === stripos($allow_hosts, $psrc['host'])) )
+		if( $host && ! in_array( $host, $allow ) )
 			return false;
 			
 		return true;
+	}
+	
+	private function __remove_www( $host ){
+		return str_replace('www.', '', $host );
 	}
 	
 	## Функция создает миниатюру. Возвращает УРЛ ссылку на миниатюру
@@ -100,53 +110,48 @@ class Kama_Make_Thumb{
 				$this->src = $this->opt->no_photo_url;
 		}
 			
-		$psrc = parse_url( $this->src );
+		$_src = parse_url( $this->src );
 		
 		// картинка не определена
-		if( ! $psrc['path'] ) return false;
-			
-		$doc_root = rtrim( $_SERVER['DOCUMENT_ROOT'], '/'); // для разных серверов
-		// изменяем путь до корня сайта для поддоменов
-		if( false !== strpos( @$this->opt->subdomen, $psrc['host'] ) )
-			$doc_root = str_replace($_SERVER['HTTP_HOST'], $psrc['host'], $doc_root);
-			
-		$src_path  = $doc_root . $psrc['path']; // собираем полный путь
-		preg_match('~\.([a-z]+)$~', $psrc['path'], $m );
-		$ext       = strtolower($m[1]);
+		if( ! $_src['path'] ) return false;
+				
+		$ext       = preg_replace('~^.*\.([a-z]+)$~', '$1', $this->src );
 		$notcrop   = $this->notcrop ? 'notcrop' : '';
-		$file_name = substr( md5($psrc['path']), -9) . "_{$this->width}x{$this->height}_{$notcrop}.{$ext}";
+		$file_name = substr( md5($_src['path']), -9 ) ."_{$this->width}x{$this->height}_{$notcrop}.{$ext}";
 		$dest      = $this->opt->cache_folder . "/$file_name"; //файл миниатюры от корня сайта
-		$out_link  = str_replace( rtrim( $_SERVER['DOCUMENT_ROOT'], '/'), '', $this->opt->cache_folder ) . "/$file_name"; //ссылка на изображение;
+		$img_url   = rtrim( $this->opt->cache_folder_url, '/') ."/$file_name"; //ссылка на изображение;
 
 		// если миниатюра уже есть, то возвращаем её
-		if ( file_exists( $dest ) )
-			return $out_link;
-		
+		if( file_exists( $dest ) )
+			return $img_url;
+
 		if( ! $this->__cache_folder_check() ){
 			return Kama_Thumbnail::show_message( __kt('Директории для создания миниатюр не существует. Создайте её: '. $this->opt->cache_folder ), 'error');
 		}
 		
-		// Если физически файл не существует (бывает файла пропадет после переезда на новый хости или работ над сайтом).
-		// В этом случае, для указаного УРЛ будет создана миниатюра из заглушки no_photo.png.
+		// Если не удалось получить картинку: унешний хост, файл пропал после переезда или еще чего.
+		// То для указаного УРЛ будет создана миниатюра из заглушки no_photo.png
 		// Чтобы после появления файла, миниатюра создалась правильно, нужно очистить кэш плагина.
-		if ( ! file_exists( $src_path ) ){
+		$img = getimagesize( $this->src );
+		if( 
+			(false === strpos($img['mime'], 'image')) || 
+			! $this->__is_allow_host( $this->src )
+		){
 			$this->src = $this->opt->no_photo_url;
-			$psrc = parse_url( $this->src );
-			$src_path = $doc_root . $psrc['path'];
 		}
 			
 		# создаем миниатюру
 		# проверим наличие библиотеки Imagick
 		if ( extension_loaded('imagick') ){
-			$this->make_thumbnail_Imagick( $src_path, $this->width, $this->height, $dest, $this->notcrop );
+			$this->make_thumbnail_Imagick( $this->src, $this->width, $this->height, $dest, $this->notcrop );
 			
-			return $out_link;
+			return $img_url;
 		}
 		# проверим наличие библиотеки GD
 		if( extension_loaded('gd') ){
-			$this->make_thumbnail_GD( $src_path, $this->width, $this->height, $dest, $this->notcrop );
+			$this->make_thumbnail_GD( $this->src, $this->width, $this->height, $dest, $this->notcrop );
 			
-			return $out_link;
+			return $img_url;
 		}
 
 		return false;
@@ -162,8 +167,11 @@ class Kama_Make_Thumb{
 	}
 
 	## ядро: создание и запись файла-картинки на основе библиотеки Imagick
-	private function make_thumbnail_Imagick( $src_path, $width, $height, $dest, $notcrop ){
-		$image = new Imagick( $src_path );
+	private function make_thumbnail_Imagick( $src_url, $width, $height, $dest, $notcrop ){
+		$handle = @ fopen( $src_url, 'r');
+		
+		$image = new Imagick();
+		$image->readImageFile( $handle );
 		
 		# Select the first frame to handle animated images properly
 		if ( is_callable( array( $image, 'setIteratorIndex') ) )
@@ -198,8 +206,10 @@ class Kama_Make_Thumb{
 	}
 	
 	## ядро: создание и запись файла-картинки на основе библиотеки GD
-	private function make_thumbnail_GD( $src_path, $width, $height, $dest, $notcrop ){
-		$size = @ getimagesize( $src_path );
+	private function make_thumbnail_GD( $img_url, $width, $height, $dest, $notcrop ){
+		//$img_url = urlencode($img_url);
+		
+		$size = @ getimagesize( $img_url );
 		//die( print_r($size) );
 
 		if( $size === false )
@@ -210,7 +220,7 @@ class Kama_Make_Thumb{
 		$format = strtolower( substr( $size['mime'], strpos($size['mime'], '/')+1 ) );
 
 		// Создаем ресурс картинки
-		$image = @ imagecreatefromstring( file_get_contents( $src_path ) );
+		$image = @ imagecreatefromstring( file_get_contents( $img_url ) );
 		if ( ! is_resource( $image ) )
 			return false; // не получилось получить картинку
 		

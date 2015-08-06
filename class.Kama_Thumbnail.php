@@ -11,8 +11,10 @@ class Kama_Thumbnail{
 	function __construct(){
 		self::$opt = (object) ( ($tmp=get_option(self::$opt_name)) ? $tmp : self::def_options() );
 
-		if( ! self::$opt->no_photo_url ) self::$opt->no_photo_url = KT_URL .'no_photo.png';
-		if( ! self::$opt->cache_folder ) self::$opt->cache_folder = str_replace('\\', '/', WP_CONTENT_DIR . '/cache/thumb');
+		if( ! @ self::$opt->no_photo_url ) self::$opt->no_photo_url = KT_URL .'no_photo.png';
+		if( ! @ self::$opt->cache_folder ) self::$opt->cache_folder = str_replace('\\', '/', WP_CONTENT_DIR . '/cache/thumb');
+		if( ! @ self::$opt->cache_folder_url ) self::$opt->cache_folder_url = content_url() .'/cache/thumb';
+		self::$opt->allow_hosts = preg_split('~\s*,\s*~', self::$opt->allow_hosts ); // сделаем массив
 		
 		$this->wp_init();
 	}
@@ -53,6 +55,7 @@ class Kama_Thumbnail{
 		return array(
 			'meta_key'       => 'photo_URL',
 			'cache_folder'   => '', // полный путь до папки миниатюр
+			'cache_folder_url' => '', // URL до папки миниатюр
 			'no_photo_url'   => '', // УРЛ на заглушку
 			'use_in_content' => 1,  // искать ли класс mini у картинок в тексте, чтобы изменить их размер
 			'auto_clear'     => 0,
@@ -138,12 +141,20 @@ class Kama_Thumbnail{
 		'. __kt('Полный путь до папки кэша с правами 755 и выше. По умолчанию: не установлено.') .'
 		<br><br>
 		
+		<input type="text" name="'. $opt_name .'[cache_folder_url]" value="'. $opt->cache_folder_url .'" style="width:100%;" placeholder="'. $this->opt->cache_folder_url .'"><br>
+		'. __kt('УРЛ папки кэша. По умолчанию: не установлено.') .'
+		<br><br>
+		
 		<input type="text" name="'. $opt_name .'[no_photo_url]" value="'. $opt->no_photo_url .'" style="width:100%;" placeholder="'. $this->opt->no_photo_url .'"><br>
 		'. __kt('УРЛ картинки заглушки. По умолчанию: не установлено.') .'
 		<br><br>
 		
 		<input type="text" name="'. $opt_name .'[meta_key]" value="'. $opt->meta_key .'" style="width:100%;"><br>
 		'. __kt('Название произвольного поля, куда будет записываться УРЛ миниатюры. По умолчанию:') .' <code>'. $def_opt->meta_key .'</code>
+		<br><br>
+		
+		<input type="text" name="'. $opt_name .'[allow_hosts]" value="'. $opt->allow_hosts .'" style="width:100%;"><br>
+		'. __kt('Доступные хосты, через запятую. По умолчанию: картинки только с родного хоста') .'
 		<br><br>
 		
 		<input type="text" name="'. $opt_name .'[quality]" value="'. $opt->quality .'" style="width:50px;"><br>
