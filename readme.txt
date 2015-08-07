@@ -142,6 +142,9 @@ Get thumb of post ID=50:
 
 
 == Changelog ==
+= 1.9.0 =
+* + Images parses from URL with curl first
+
 = 1.8.0 =
 * + Images parses from URL. It fix some bugs, where plugin couldn't create abs path to img.
 * + Allowed hosts settings. Now you can set sites from which tumbs will be created too.

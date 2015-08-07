@@ -14,11 +14,19 @@ class Kama_Thumbnail{
 		if( ! @ self::$opt->no_photo_url ) self::$opt->no_photo_url = KT_URL .'no_photo.png';
 		if( ! @ self::$opt->cache_folder ) self::$opt->cache_folder = str_replace('\\', '/', WP_CONTENT_DIR . '/cache/thumb');
 		if( ! @ self::$opt->cache_folder_url ) self::$opt->cache_folder_url = content_url() .'/cache/thumb';
-		self::$opt->allow_hosts = preg_split('~\s*,\s*~', @ self::$opt->allow_hosts ); // сделаем массив
 		
+		$ah = & self::$opt->allow_hosts;
+		if( $ah && ! is_array( $ah ) ){
+			$ah = preg_split('~\s*,\s*~', trim( $ah ) ); // сделаем массив
+			foreach( $ah as & $host )
+				$host = str_replace('www.', '', $host );
+		}
+		else 
+			$ah = array();
+
 		$this->wp_init();
 	}
-	
+		
 	function wp_init(){
 		// админка
 		if( is_admin() && ! defined('DOING_AJAX') ){
@@ -118,7 +126,7 @@ class Kama_Thumbnail{
 		add_settings_field( 'kt_options_field',
 			'<a href="?kt_clear=clear_cache" class="button">'. __kt('Очистить кеш картинок') .'</a> <br><br> 
 			<a href="?kt_clear=del_customs" class="button">'. __kt('Удалить произвольные поля') .'</a>',
-			array( $this, 'options_field'), // можно указать ''
+			array( & $this, 'options_field'), // можно указать ''
 			'media', // страница
 			'kama_thumbnail' // секция
 		);
