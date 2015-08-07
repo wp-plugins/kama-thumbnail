@@ -16,10 +16,9 @@ class Kama_Make_Thumb{
 	
 	function __construct( $args = array() ){
 		$this->opt  = & Kama_Thumbnail::$opt;
-		$this->set_args( $args );
-
 		$this->opt->allow_hosts[] = str_replace('www.', '', $_SERVER['HTTP_HOST'] );
-
+		
+		$this->set_args( $args );
 	}
 	
 	# Берем ссылку на картинку из произвольного поля, или из текста, создаем произвольное поле.
@@ -142,8 +141,8 @@ class Kama_Make_Thumb{
 		// То для указаного УРЛ будет создана миниатюра из заглушки no_photo.png
 		// Чтобы после появления файла, миниатюра создалась правильно, нужно очистить кэш плагина.
 		$img_str = $this->get_img_string( $this->src );
-		
-		$size = @ getimagesizefromstring( $img_str );
+
+		$size = $this->__getimagesizefromstring( $img_str );
 
 		if( false === strpos($size['mime'], 'image') ){
 			$this->src = $this->opt->no_photo_url;
@@ -165,6 +164,13 @@ class Kama_Make_Thumb{
 		}
 
 		return false;
+	}
+	
+	function __getimagesizefromstring( $data ){
+		if( function_exists('getimagesizefromstring') )
+			return getimagesizefromstring( $data );
+		
+		return getimagesize('data://application/octet-stream;base64,'. base64_encode($data) );
 	}
 	
 	## проверяем наличие директории, пытаемся создать, если её нет	
@@ -235,7 +241,7 @@ class Kama_Make_Thumb{
 	
 	## ядро: создание и запись файла-картинки на основе библиотеки GD
 	private function make_thumbnail_GD( $img_string, $width, $height, $dest, $notcrop ){		
-		$size = @ getimagesizefromstring( $img_string );
+		$size = $this->__getimagesizefromstring( $img_string );
 		//die( print_r($size) );
 
 		if( $size === false )

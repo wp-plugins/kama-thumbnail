@@ -1,5 +1,5 @@
 === Plugin Name ===
-Stable tag: 1.8.0
+Stable tag: 1.9.1
 Tested up to: 4.2.3
 Requires at least: 2.7
 License: GPLv2 or later
@@ -142,6 +142,9 @@ Get thumb of post ID=50:
 
 
 == Changelog ==
+= 1.9.1 =
+* Fix: getimagesizefromstring() only work in php 5.4+
+
 = 1.9.0 =
 * + Images parses from URL with curl first
 

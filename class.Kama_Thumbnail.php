@@ -15,6 +15,7 @@ class Kama_Thumbnail{
 		if( ! @ self::$opt->cache_folder ) self::$opt->cache_folder = str_replace('\\', '/', WP_CONTENT_DIR . '/cache/thumb');
 		if( ! @ self::$opt->cache_folder_url ) self::$opt->cache_folder_url = content_url() .'/cache/thumb';
 		
+		// allow_hosts
 		$ah = & self::$opt->allow_hosts;
 		if( $ah && ! is_array( $ah ) ){
 			$ah = preg_split('~\s*,\s*~', trim( $ah ) ); // сделаем массив
