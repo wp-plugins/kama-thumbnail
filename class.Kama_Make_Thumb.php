@@ -1,4 +1,48 @@
 <?php
+/**
+ * Этот файл можно использовать автономно в темах, для создания миниатюр. Для этого нужно установить настройки в переменную $this->opt
+ * Возможные настройки:
+ *
+	stdClass Object
+	(
+		[cache_folder] =&gt; sites/site.uz/www/assets/cache/thumb
+		[cache_folder_url] =&gt; http://site.uz/assets/cache/thumb
+		[no_photo_url] =&gt; http://site.uz/assets/plugins/kama-thumbnail/no_photo.png
+		[meta_key] =&gt; photo_URL
+		[allow_hosts] =&gt; Array
+			(
+			)
+		[quality] =&gt; 85
+		[use_in_content] =&gt; 1
+	)
+ * 
+ */
+
+/** 
+ * Функции обертки (для темы)
+ *
+ * Аргументы: src, post_id, w/width, h/height, q, alt, class, title, no_stub, notcrop
+ * Примечание: если не определяется src и переменная $post определяется неправилно, то определяем параметр
+ * post_id - идентификатор поста, чтобы правильно получить произвольное поле с картинкой.
+ */
+# вернет только ссылку
+function kama_thumb_src( $args = '' ){
+	$kt = new Kama_Make_Thumb( $args );
+	return $kt->src();
+}
+
+# вернет картинку (готовый тег img)
+function kama_thumb_img( $args='' ){
+	$kt = new Kama_Make_Thumb( $args );
+	return $kt->img();
+}
+
+# вернет ссылку-картинку
+function kama_thumb_a_img( $args='' ){
+	$kt = new Kama_Make_Thumb( $args );
+	return $kt->a_img();
+}
+
 
 class Kama_Make_Thumb{
 	public $src;
@@ -10,9 +54,7 @@ class Kama_Make_Thumb{
 	public $no_stub;
 	
 	private $args;
-	private $opt;
-	
-	//private $img_string; // картинка в виде строки
+	private $opt;	
 	
 	function __construct( $args = array() ){
 		$this->opt  = & Kama_Thumbnail::$opt;
@@ -127,7 +169,10 @@ class Kama_Make_Thumb{
 		// once ------------------------------------------------------
 		
 		if( ! $this->__cache_folder_check() ){
-			return Kama_Thumbnail::show_message( __kt('Директории для создания миниатюр не существует. Создайте её: '. $this->opt->cache_folder ), 'error');
+			if( class_exists('Kama_Thumbnail') )
+				return Kama_Thumbnail::show_message( __kt('Директории для создания миниатюр не существует. Создайте её: '. $this->opt->cache_folder ), 'error');
+			else
+				die('No cache folder. Create it: '. $this->opt->cache_folder );
 		}			
 		
 		// если релевантная ссылка
@@ -192,7 +237,7 @@ class Kama_Make_Thumb{
 				curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 				curl_setopt($ch, CURLOPT_BINARYTRANSFER, 1);
 				$img_string = curl_exec($ch);
-				curl_close ($ch);
+				curl_close($ch);
 			}
 			elseif( ini_get('allow_url_fopen') ) {
 			   $img_string = file_get_contents( $img_url );

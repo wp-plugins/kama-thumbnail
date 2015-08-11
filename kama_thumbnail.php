@@ -43,30 +43,3 @@ function __kt( $text ){
 }
 
 
-
-/** 
- * Функции вызова (для шаблона)
- *
- * Аргументы: src, post_id, w/width, h/height, q, alt, class, title, no_stub(не показывать заглушку)
- * Примечание: если не определяется src и переменная $post определяется неправилно, то определяем параметр
- * post_id - идентификатор поста, чтобы правильно получить произвольное поле с картинкой.
- */
-# вернет только ссылку
-function kama_thumb_src( $args = '' ){
-	$kt = new Kama_Make_Thumb( $args );
-	return $kt->src();
-}
-
-# вернет картинку (готовый тег img)
-function kama_thumb_img( $args='' ){
-	$kt = new Kama_Make_Thumb( $args );
-	return $kt->img();
-}
-
-# вернет ссылку-картинку
-function kama_thumb_a_img( $args='' ){
-	$kt = new Kama_Make_Thumb( $args );
-	return $kt->a_img();
-}
-
-
