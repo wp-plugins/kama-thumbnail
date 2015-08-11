@@ -1,5 +1,5 @@
 === Plugin Name ===
-Stable tag: 1.9.1
+Stable tag: 1.9.2
 Tested up to: 4.2.3
 Requires at least: 2.7
 License: GPLv2 or later
@@ -142,6 +142,9 @@ Get thumb of post ID=50:
 
 
 == Changelog ==
+= 1.9.2 =
+* fix: trys to get image by abs server path, if none of: CURL || allow_url_fopen=on is set on server
+
 = 1.9.1 =
 * Fix: getimagesizefromstring() only work in php 5.4+
 

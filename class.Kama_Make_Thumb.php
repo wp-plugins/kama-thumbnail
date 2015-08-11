@@ -182,20 +182,27 @@ class Kama_Make_Thumb{
 		return $is;
 	}
 	
-	private function get_img_string( $img ){
-		$img_string = $img;
-		if( false !== strpos( $img, 'http' ) ){
+	private function get_img_string( $img_url ){
+		$img_string = $img_url;
+		if( false !== strpos( $img_url, 'http' ) ){
 			// curl
 			if( is_callable('curl_init') ){
-				$ch = curl_init( $img );
+				$ch = curl_init( $img_url );
 				curl_setopt($ch, CURLOPT_HEADER, 0);
 				curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 				curl_setopt($ch, CURLOPT_BINARYTRANSFER, 1);
 				$img_string = curl_exec($ch);
 				curl_close ($ch);
 			}
-			else
-				$img_string = file_get_contents( $img );
+			elseif( ini_get('allow_url_fopen') ) {
+			   $img_string = file_get_contents( $img_url );
+			}
+			// пробуем получить по абсолютному пути
+			else{
+				$img_path = preg_replace('~^https?://[^/]+(/.*)$~', $_SERVER['DOCUMENT_ROOT'] .'$1', $img_url );
+				if( file_exists( $img_path ) )
+					$img_string = file_get_contents( $img_path );
+			}
 		}
 		
 		return $img_string;
