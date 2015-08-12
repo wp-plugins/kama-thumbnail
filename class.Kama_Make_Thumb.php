@@ -1,20 +1,29 @@
 <?php
 /**
- * Этот файл можно использовать автономно в темах, для создания миниатюр. Для этого нужно установить настройки в переменную $GLOBALS['kt_opt']
+ * Этот файл можно использовать автономно в темах, для создания миниатюр. 
+ * Для этого нужно установить настройки в переменную $GLOBALS['kt_opt']
+ * version 1.0
  */
 
-## опции по умолчанию, если класс используется отдельно
-/*
-$GLOBALS['kt_opt'] = (object) array(
-	'cache_folder'     => 'sites/site.uz/www/wp-content/cache/thumb',
-	'cache_folder_url' => 'http://site.uz/wp-content/cache/thumb',
-	'no_photo_url'     => 'http://site.uz/wp-content/plugins/kama-thumbnail/no_photo.png',
-	'meta_key'         => 'photo_URL',
-	'allow_hosts'      => array(), //array('special.ru'),
-	'quality'          => 85,
-	'use_in_content'   => 1,
-);
-*/
+if( ! class_exists('Kama_Thumbnail') ){
+	## опции по умолчанию, если класс используется отдельно
+	$GLOBALS['kt_opt'] = (object) array(
+		// Путь до папки кэша. По умолчанию - server/.../wp-content/cache/thumb.
+		'cache_folder'     => wp_normalize_path( WP_CONTENT_DIR . '/cache/thumb'),
+		// УРЛ папки кэша. По умолчанию - .../wp-content/cache/thumb
+		'cache_folder_url' => content_url() .'/cache/thumb',
+		// УРЛ картинки заглушки. По умолчанию - картинка no_photo.png, которая лежит рядом с этим файлом
+		'no_photo_url'     => str_replace( get_template_directory(), get_template_directory_uri(), wp_normalize_path(dirname(__FILE__)) ) .'/no_photo.png',
+		// Название произвольного поля
+		'meta_key'         => 'photo_URL',
+		// Доп. хосты с которых можно создавать мини-ры. Пр.: array('special.ru', 'files.site.ru')
+		'allow_hosts'      => array(),
+		// качество сжатия jpg
+		'quality'          => 80,
+		// не выводить картинку-заглушку
+		'no_stub'          => false,
+	);
+}
 
 /** 
  * Функции обертки (для темы)
@@ -55,7 +64,7 @@ class Kama_Make_Thumb{
 	private $opt;	
 	
 	function __construct( $args = array() ){
-		$this->opt = ( class_exists('Kama_Thumbnail') ? Kama_Thumbnail::$opt : $GLOBALS['kt_opt'] );
+		$this->opt = class_exists('Kama_Thumbnail') ? Kama_Thumbnail::$opt : $GLOBALS['kt_opt'];
 		$this->opt->allow_hosts[] = str_replace('www.', '', $_SERVER['HTTP_HOST'] );
 		
 		$this->set_args( $args );
@@ -170,7 +179,7 @@ class Kama_Make_Thumb{
 			if( class_exists('Kama_Thumbnail') )
 				return Kama_Thumbnail::show_message( __kt('Директории для создания миниатюр не существует. Создайте её: '. $this->opt->cache_folder ), 'error');
 			else
-				die('No cache folder. Create it: '. $this->opt->cache_folder );
+				die('Kama_Thumbnail: No cache folder. Create it: '. $this->opt->cache_folder );
 		}			
 		
 		// если релевантная ссылка
@@ -426,8 +435,8 @@ class Kama_Make_Thumb{
 		
 		$width = $height = '';
 		if( ! $this->notcrop ){
-			$width  = $this->width  ? "width='$this->width'"   : '';
-			$height = $this->height ? "height='$this->height'" : '';
+			$width  = $this->width  ? "width=\"$this->width\""   : '';
+			$height = $this->height ? "height=\"$this->height\"" : '';
 		}
 		
 		$out = '';
