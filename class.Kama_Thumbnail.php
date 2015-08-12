@@ -147,15 +147,15 @@ class Kama_Thumbnail{
 		
 		$out .= '
 		<input type="text" name="'. $opt_name .'[cache_folder]" value="'. $opt->cache_folder .'" style="width:100%;" placeholder="'. $this->opt->cache_folder .'"><br>
-		'. __kt('Полный путь до папки кэша с правами 755 и выше. По умолчанию: не установлено.') .'
+		'. __kt('Полный путь до папки кэша с правами 755 и выше. По умолчанию: пусто.') .'
 		<br><br>
 		
 		<input type="text" name="'. $opt_name .'[cache_folder_url]" value="'. $opt->cache_folder_url .'" style="width:100%;" placeholder="'. $this->opt->cache_folder_url .'"><br>
-		'. __kt('УРЛ папки кэша. По умолчанию: не установлено.') .'
+		'. __kt('УРЛ папки кэша. По умолчанию: пусто.') .'
 		<br><br>
 		
 		<input type="text" name="'. $opt_name .'[no_photo_url]" value="'. $opt->no_photo_url .'" style="width:100%;" placeholder="'. $this->opt->no_photo_url .'"><br>
-		'. __kt('УРЛ картинки заглушки. По умолчанию: не установлено.') .'
+		'. __kt('УРЛ картинки заглушки. По умолчанию: пусто.') .'
 		<br><br>
 		
 		<input type="text" name="'. $opt_name .'[meta_key]" value="'. $opt->meta_key .'" style="width:100%;"><br>
@@ -163,10 +163,10 @@ class Kama_Thumbnail{
 		<br><br>
 		
 		<input type="text" name="'. $opt_name .'[allow_hosts]" value="'. $opt->allow_hosts .'" style="width:100%;"><br>
-		'. __kt('Доступные хосты, через запятую. По умолчанию: картинки только с родного хоста') .'
+		'. __kt('Хосты через запятую с которых разрешается создавать миниатюры. Пр.: <i>sub.mysite.com</i>') .'
 		<br><br>
 		
-		<input type="text" name="'. $opt_name .'[quality]" value="'. $opt->quality .'" style="width:50px;"><br>
+		<input type="text" name="'. $opt_name .'[quality]" value="'. $opt->quality .'" style="width:50px;"> 
 		'. __kt('Качество создаваемых миниатюр от 0 до 100. По умолчанию:') .' <code>'. $def_opt->quality .'</code>
 		<br><br>
 		

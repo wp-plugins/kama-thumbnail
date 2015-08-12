@@ -3,20 +3,28 @@
  * Этот файл можно использовать автономно в темах, для создания миниатюр. Для этого нужно установить настройки в переменную $this->opt
  * Возможные настройки:
  *
-	stdClass Object
-	(
-		[cache_folder] =&gt; sites/site.uz/www/assets/cache/thumb
-		[cache_folder_url] =&gt; http://site.uz/assets/cache/thumb
-		[no_photo_url] =&gt; http://site.uz/assets/plugins/kama-thumbnail/no_photo.png
-		[meta_key] =&gt; photo_URL
-		[allow_hosts] =&gt; Array
-			(
-			)
-		[quality] =&gt; 85
-		[use_in_content] =&gt; 1
-	)
+	$GLOBALS['kt_opt'] = (object) array(
+		'cache_folder'     => 'sites/site.uz/www/wp-content/cache/thumb',
+		'cache_folder_url' => 'http://site.uz/wp-content/cache/thumb',
+		'no_photo_url'     => 'http://site.uz/wp-content/plugins/kama-thumbnail/no_photo.png',
+		'meta_key'         => 'photo_URL',
+		'allow_hosts'      => array(), //array('special.ru'),
+		'quality'          => 85,
+		'use_in_content'   => 1,
+	);
  * 
  */
+
+## опции по умолчанию, если класс используется отдельно
+$GLOBALS['kt_opt'] = (object) array(
+	'cache_folder'     => 'sites/site.uz/www/wp-content/cache/thumb',
+	'cache_folder_url' => 'http://site.uz/wp-content/cache/thumb',
+	'no_photo_url'     => 'http://site.uz/wp-content/plugins/kama-thumbnail/no_photo.png',
+	'meta_key'         => 'photo_URL',
+	'allow_hosts'      => array(), //array('special.ru'),
+	'quality'          => 85,
+	'use_in_content'   => 1,
+);
 
 /** 
  * Функции обертки (для темы)
@@ -25,19 +33,19 @@
  * Примечание: если не определяется src и переменная $post определяется неправилно, то определяем параметр
  * post_id - идентификатор поста, чтобы правильно получить произвольное поле с картинкой.
  */
-# вернет только ссылку
+## вернет только ссылку
 function kama_thumb_src( $args = '' ){
 	$kt = new Kama_Make_Thumb( $args );
 	return $kt->src();
 }
 
-# вернет картинку (готовый тег img)
+## вернет картинку (готовый тег img)
 function kama_thumb_img( $args='' ){
 	$kt = new Kama_Make_Thumb( $args );
 	return $kt->img();
 }
 
-# вернет ссылку-картинку
+## вернет ссылку-картинку
 function kama_thumb_a_img( $args='' ){
 	$kt = new Kama_Make_Thumb( $args );
 	return $kt->a_img();
@@ -57,7 +65,7 @@ class Kama_Make_Thumb{
 	private $opt;	
 	
 	function __construct( $args = array() ){
-		$this->opt  = & Kama_Thumbnail::$opt;
+		$this->opt = ( class_exists('Kama_Thumbnail') ? Kama_Thumbnail::$opt : $GLOBALS['kt_opt'] );
 		$this->opt->allow_hosts[] = str_replace('www.', '', $_SERVER['HTTP_HOST'] );
 		
 		$this->set_args( $args );
