@@ -1,21 +1,10 @@
 <?php
 /**
- * Этот файл можно использовать автономно в темах, для создания миниатюр. Для этого нужно установить настройки в переменную $this->opt
- * Возможные настройки:
- *
-	$GLOBALS['kt_opt'] = (object) array(
-		'cache_folder'     => 'sites/site.uz/www/wp-content/cache/thumb',
-		'cache_folder_url' => 'http://site.uz/wp-content/cache/thumb',
-		'no_photo_url'     => 'http://site.uz/wp-content/plugins/kama-thumbnail/no_photo.png',
-		'meta_key'         => 'photo_URL',
-		'allow_hosts'      => array(), //array('special.ru'),
-		'quality'          => 85,
-		'use_in_content'   => 1,
-	);
- * 
+ * Этот файл можно использовать автономно в темах, для создания миниатюр. Для этого нужно установить настройки в переменную $GLOBALS['kt_opt']
  */
 
 ## опции по умолчанию, если класс используется отдельно
+/*
 $GLOBALS['kt_opt'] = (object) array(
 	'cache_folder'     => 'sites/site.uz/www/wp-content/cache/thumb',
 	'cache_folder_url' => 'http://site.uz/wp-content/cache/thumb',
@@ -25,6 +14,7 @@ $GLOBALS['kt_opt'] = (object) array(
 	'quality'          => 85,
 	'use_in_content'   => 1,
 );
+*/
 
 /** 
  * Функции обертки (для темы)
@@ -71,8 +61,8 @@ class Kama_Make_Thumb{
 		$this->set_args( $args );
 	}
 	
-	# Берем ссылку на картинку из произвольного поля, или из текста, создаем произвольное поле.
-	# Если в тексте нет картинки, ставим заглушку no_photo
+	## Берем ссылку на картинку из произвольного поля, или из текста, создаем произвольное поле.
+	## Если в тексте нет картинки, ставим заглушку no_photo
 	private function get_src_and_set_postmeta(){
 		global $post, $wpdb;
 		
@@ -237,9 +227,14 @@ class Kama_Make_Thumb{
 	
 	private function get_img_string( $img_url ){
 		$img_string = $img_url;
+		
 		if( false !== strpos( $img_url, 'http' ) ){
 			// curl
-			if( is_callable('curl_init') ){
+			if(0){}
+			elseif( ini_get('allow_url_fopen') ) {
+			   $img_string = file_get_contents( $img_url );
+			}
+			elseif( is_callable('curl_init') ){
 				$ch = curl_init( $img_url );
 				curl_setopt($ch, CURLOPT_HEADER, 0);
 				curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
@@ -247,12 +242,16 @@ class Kama_Make_Thumb{
 				$img_string = curl_exec($ch);
 				curl_close($ch);
 			}
-			elseif( ini_get('allow_url_fopen') ) {
-			   $img_string = file_get_contents( $img_url );
-			}
 			// пробуем получить по абсолютному пути
 			else{
-				$img_path = preg_replace('~^https?://[^/]+(/.*)$~', $_SERVER['DOCUMENT_ROOT'] .'$1', $img_url );
+				// получим корень сайта $_SERVER['DOCUMENT_ROOT'] может быть неверный
+				$root = ABSPATH;
+				$root_parent = dirname( ABSPATH ).'/';
+				if( file_exists( $root_parent . 'wp-config.php') && ! file_exists( $root_parent . 'wp-settings.php' ) ){
+					$root = $root_parent;
+				}
+				
+				$img_path = preg_replace('~^https?://[^/]+(/.*)$~', $root .'$1', $img_url );
 				if( file_exists( $img_path ) )
 					$img_string = file_get_contents( $img_path );
 			}
