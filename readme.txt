@@ -28,7 +28,7 @@ Using the code in the loop you will get ready thumbnail IMG tag. Plugin takes po
 You can make thumbs from custom URL, like this:
 `<?php echo kama_thumb_img('w=150 &h=150 &src=URL_TO_IMG'); ?>`
 
-The `URL_TO_IMG` must be from local server: plugin don't work with external images, because of security.
+The `URL_TO_IMG` must be from local server: by default, plugin don't work with external images, because of security. But you can set allowed hosts on settings page.
 
 After install use this functions in code:
 
