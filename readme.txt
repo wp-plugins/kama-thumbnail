@@ -67,7 +67,7 @@ kama_thumb_img( array(
 3. `src` parameter is for cases when you need create thumb from any image not image of WordPress post.
 4. For test is there image for post, use this code:
 `
-if( ! $$img = kama_thumb_img('w=150&h=150&no_stub') )
+if( ! kama_thumb_img('w=150&h=150&no_stub') )
 	echo 'NO img';
 `
 
@@ -120,6 +120,21 @@ Get thumb of post ID=50:
 `
 <?php echo kama_thumb_img("w=150 &h=100 &post_id=50"); ?>
 `
+
+### I don't need plugin ###
+This plugin can be easily used not as a plugin, but as a simple php file.
+
+If you are themes developer, and need all it functionality, but you neeed to instal the plugin as part of the theme, this short instruction for you:
+
+1. Create folder in your theme, let it be 'thumbmaker' - it is for convenience.
+2. Download the plugin and copy the files: `class.Kama_Make_Thumb.php` and `no_photo.png` to the folder you just create.
+3. Include `class.Kama_Make_Thumb.php` file into theme `functions.php`, like this:
+`require 'thumbmaker/class.Kama_Make_Thumb.php';`
+4. Bingo! Use functions: `kama_thumb_*()` in your theme code.
+5. If necessary, open `class.Kama_Make_Thumb.php` and edit options (at the top of the file): cache folder URL/PATH, custom field name etc.
+
+* Conditions of Use - mention of this plugin in describing of your theme.
+
 
 == Screenshots ==
 
