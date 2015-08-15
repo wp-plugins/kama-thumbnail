@@ -124,7 +124,7 @@ Get thumb of post ID=50:
 ### I don't need plugin ###
 This plugin can be easily used not as a plugin, but as a simple php file.
 
-If you are themes developer, and need all it functionality, but you neeed to instal the plugin as part of the theme, this short instruction for you:
+If you are themes developer, and need all it functionality, but you need to install the plugin as the part of your theme, this short instruction for you:
 
 1. Create folder in your theme, let it be 'thumbmaker' - it is for convenience.
 2. Download the plugin and copy the files: `class.Kama_Make_Thumb.php` and `no_photo.png` to the folder you just create.
