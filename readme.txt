@@ -167,11 +167,11 @@ If you are themes developer, and need all it functionality, but you need to inst
 * Fix: getimagesizefromstring() only work in php 5.4+
 
 = 1.9.0 =
-* + Images parses from URL with curl first
+* added: Images parses from URL with curl first
 
 = 1.8.0 =
-* + Images parses from URL. It fix some bugs, where plugin couldn't create abs path to img.
-* + Allowed hosts settings. Now you can set sites from which tumbs will be created too.
+* added: Images parses from URL. It fix some bugs, where plugin couldn't create abs path to img.
+* added: Allowed hosts settings. Now you can set sites from which tumbs will be created too.
 
 = 1.7.2 =
 * Back to PHP 5.2 support :(
@@ -183,7 +183,7 @@ If you are themes developer, and need all it functionality, but you need to inst
 * Fix: refactor - separate one class to two: "WP Plugin" & "Thumb Maker". Now code have better logic!
 
 = 1.6.5 =
-* + EN localisation
+* added: EN localisation
 
 = 1.6.4 =
 * Added: now cache_folder & no_photo_url detected automatically
