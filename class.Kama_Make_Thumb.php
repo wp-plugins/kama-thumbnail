@@ -163,7 +163,7 @@ class Kama_Make_Thumb{
 		if( ! $path = $_src['path'] ) return false;
 		
 		preg_match('~^.*\.([a-z]+)$~', $path, $m );
-		$ext       = $m[1] ? $m[1] : 'jpg';
+		$ext       = $m[1] ? $m[1] : 'png';
 		$notcrop   = $this->notcrop ? 'notcrop' : '';
 		$file_name = substr( md5($path), -9 ) ."_{$this->width}x{$this->height}_{$notcrop}.{$ext}";
 		$dest      = $this->opt->cache_folder . "/$file_name"; //файл миниатюры от корня сайта
