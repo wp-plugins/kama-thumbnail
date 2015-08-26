@@ -2,7 +2,7 @@
 /**
  * Этот файл можно использовать автономно в темах, для создания миниатюр. 
  * Для этого нужно установить настройки в переменную $GLOBALS['kt_opt']
- * version 1.0
+ * version 1.1
  */
 
 if( ! class_exists('Kama_Thumbnail') ){
@@ -160,11 +160,12 @@ class Kama_Make_Thumb{
 		$_src = parse_url( $this->src );
 		
 		// картинка не определена
-		if( ! $_src['path'] ) return false;
-				
-		$ext       = preg_replace('~^.*\.([a-z]+)$~', '$1', $this->src );
+		if( ! $path = $_src['path'] ) return false;
+		
+		preg_match('~^.*\.([a-z]+)$~', $path, $m );
+		$ext       = $m[1] ? $m[1] : 'jpg';
 		$notcrop   = $this->notcrop ? 'notcrop' : '';
-		$file_name = substr( md5($_src['path']), -9 ) ."_{$this->width}x{$this->height}_{$notcrop}.{$ext}";
+		$file_name = substr( md5($path), -9 ) ."_{$this->width}x{$this->height}_{$notcrop}.{$ext}";
 		$dest      = $this->opt->cache_folder . "/$file_name"; //файл миниатюры от корня сайта
 		$img_url   = rtrim( $this->opt->cache_folder_url, '/') ."/$file_name"; //ссылка на изображение;
 

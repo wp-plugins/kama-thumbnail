@@ -1,6 +1,6 @@
 === Plugin Name ===
-Stable tag: 1.9.3
-Tested up to: 4.2.3
+Stable tag: 1.9.4
+Tested up to: 4.3.0
 Requires at least: 2.7
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -157,6 +157,9 @@ If you are themes developer, and need all it functionality, but you need to inst
 
 
 == Changelog ==
+= 1.9.4 =
+* Fix: ext detection if img URL have querya rgs like <code>*.jpg?foo</code>
+
 = 1.9.3 =
 * improve: DOCUMENT ROOT detection if allow_url_fopen and CURL disabled on server
 
