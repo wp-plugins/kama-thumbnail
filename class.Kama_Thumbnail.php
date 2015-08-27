@@ -125,7 +125,9 @@ class Kama_Thumbnail{
 		// Добавляем поля опций. Указываем название, описание, 
 		// функцию выводящую html код поля опции.
 		add_settings_field( 'kt_options_field',
-			'<a href="?kt_clear=clear_cache" class="button">'. __kt('Очистить кеш картинок') .'</a> <br><br> 
+			'
+			<a href="?kt_clear=clear_cache_stub" class="button">'. __kt('Очистить кэш заглушек') .'</a> <br><br> 
+			<a href="?kt_clear=clear_cache" class="button">'. __kt('Очистить весь кеш') .'</a> <br><br> 
 			<a href="?kt_clear=del_customs" class="button">'. __kt('Удалить произвольные поля') .'</a>',
 			array( & $this, 'options_field'), // можно указать ''
 			'media', // страница
@@ -175,7 +177,7 @@ class Kama_Thumbnail{
 		</label><br><br>
 		
 		<label>
-			<input type="checkbox" name="'. $opt_name .'[auto_clear]" value="1" '. checked(1, @ $opt->auto_clear, 0) .'> '. __kt('Автоматическая очистка папки кэша каждые 7 дней.') .'
+			<input type="checkbox" name="'. $opt_name .'[auto_clear]" value="1" '. checked(1, @ $opt->auto_clear, 0) .'> '. __kt('Автоматическая очистка всего кэша каждые 7 дней.') .'
 		</label><br><br>
 		
 		<label>
@@ -203,6 +205,8 @@ class Kama_Thumbnail{
 		
 		if( isset( self::$opt->auto_clear ) )
 			$this->clear();
+		
+		$this->clear_stub();
 	}
 	
 	function clear(){	
@@ -218,25 +222,48 @@ class Kama_Thumbnail{
 		return;
 	}
 	
+	function clear_stub(){	
+		$cache_dir = self::$opt->cache_folder;
+		$expire_time = time() + (3600*24); // очистка заглушек каждый день
+		//$expire_time = time() + 20; // тест
+
+		$expire = @ file_get_contents( $cache_dir .'/expire_stub');
+		if( $expire && (int) $expire < time() )
+			$this->clear_cache('only_stub');
+
+		@ file_put_contents( $cache_dir .'/expire_stub', $expire_time );
+		
+		return;
+	}
+	
 	# ?kt_clear=clear_cache - очистит кеш картинок ?kt_clear=del_customs - удалит произвольные поля
 	function force_clear( $do ){
 		switch( $do ){
 			case 'clear_cache': $text = $this->clear_cache(); break;
+			case 'clear_cache_stub': $text = $this->clear_cache('only_stub'); break;
 			case 'del_customs': $text = $this->del_customs(); break;
 		}
 	}
 
-	function clear_cache(){
+	function clear_cache( $only_stub = '' ){
 		if( ! $cache_dir = self::$opt->cache_folder ){
 			self::show_message( __kt('Путь до папки кэша не установлен в настройках.'), 'error');
 			return false;
 		}
 		
 		if( ! is_dir($cache_dir) ) return true;
-
-		foreach( glob($cache_dir .'/*') as $obj ) unlink($obj);
 		
-		self::show_message( __kt('Кэш <b>Kama Thumbnail</b> был очищен.') );
+		$find = $cache_dir .'/*';
+		if( $only_stub )
+			$find = $cache_dir .'/stub_*';
+		
+		foreach( glob( $find ) as $obj )
+			unlink($obj);
+		
+		if( $only_stub )
+			self::show_message( __kt('Картинки-заглушки были удалены из кэша <b>Kama Thumbnail</b>.') );
+		else	
+			self::show_message( __kt('Кэш <b>Kama Thumbnail</b> был очищен.') );
 		
 		return true;
 	}

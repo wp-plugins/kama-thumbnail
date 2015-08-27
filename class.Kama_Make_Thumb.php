@@ -2,7 +2,7 @@
 /**
  * Этот файл можно использовать автономно в темах, для создания миниатюр. 
  * Для этого нужно установить настройки в переменную $GLOBALS['kt_opt']
- * version 1.1
+ * version 1.2
  */
 
 if( ! class_exists('Kama_Thumbnail') ){
@@ -62,6 +62,7 @@ class Kama_Make_Thumb{
 	
 	private $args;
 	private $opt;	
+	private $is_no_photo = false;	
 	
 	function __construct( $args = array() ){
 		$this->opt = class_exists('Kama_Thumbnail') ? Kama_Thumbnail::$opt : $GLOBALS['kt_opt'];
@@ -142,6 +143,19 @@ class Kama_Make_Thumb{
 			
 		return false;
 	}
+	
+	## не работает пока...
+	static function debug_msg(){
+		return (object) array(
+			'err1' => 'not_allowed_host',
+		);
+	}
+	
+	## добавляет в конец назыания файла строку stub
+	function add_stub_to_path( $path_url ){
+		$bname = basename( $path_url );
+		return str_replace( $bname, 'stub_'. $bname, $path_url );
+	}
 
 	## Функция создает миниатюру. Возвращает УРЛ ссылку на миниатюру
 	function do_thumbnail(){
@@ -153,8 +167,10 @@ class Kama_Make_Thumb{
 		if( $this->src == 'no_photo'){
 			if( $this->no_stub )
 				return false;
-			else
+			else{
 				$this->src = $this->opt->no_photo_url;
+				$this->is_no_photo = true;
+			}
 		}
 		
 		$_src = parse_url( $this->src );
@@ -164,18 +180,29 @@ class Kama_Make_Thumb{
 		
 		preg_match('~(?<=\.)[a-z]+$~i', $path, $m );
 		$ext       = $m[0] ? $m[0] : 'png';
-		//die(print_r($m));
-		$notcrop   = $this->notcrop ? 'notcrop' : '';
-		$file_name = substr( md5($path), -9 ) ."_{$this->width}x{$this->height}_{$notcrop}.{$ext}";
+
+		$notcrop   = $this->notcrop ? '_notcrop' : '';
+		$file_name = substr( md5($path), -9 ) ."_{$this->width}x{$this->height}{$notcrop}.{$ext}";
 		$dest      = $this->opt->cache_folder . "/$file_name"; //файл миниатюры от корня сайта
 		$img_url   = rtrim( $this->opt->cache_folder_url, '/') ."/$file_name"; //ссылка на изображение;
+		
+		// изменим название файлов если картинка заглушка
+		if( $this->is_no_photo ){
+			$dest    = $this->add_stub_to_path( $dest );
+			$img_url = $this->add_stub_to_path( $img_url );
+		}
 		
 		// если миниатюра уже есть, то возвращаем её
 		if( file_exists( $dest ) )
 			return $img_url;
+		// если есть заглушка возвращаем её
+		elseif( file_exists( $this->add_stub_to_path($dest) ) ){
+			return $this->add_stub_to_path( $img_url );
+		}
 		
 		
 		// once ------------------------------------------------------
+		//$err_msg = '';
 		
 		if( ! $this->__cache_folder_check() ){
 			if( class_exists('Kama_Thumbnail') )
@@ -188,9 +215,11 @@ class Kama_Make_Thumb{
 		if( $this->src{0} == '/' )
 			$this->src = home_url() . $this->src;
 		
-		if( ! $this->__is_allow_host( $this->src ) )
+		if( ! $this->__is_allow_host( $this->src ) ){
 			$this->src = $this->opt->no_photo_url;
-		
+			$this->is_no_photo = true;
+
+		}
 		
 		// Если не удалось получить картинку: недоступный хост, файл пропал после переезда или еще чего.
 		// То для указаного УРЛ будет создана миниатюра из заглушки no_photo.png
@@ -199,11 +228,18 @@ class Kama_Make_Thumb{
 		
 		$size = $this->__getimagesizefromstring( $img_str );
 		
-		if( false === strpos($size['mime'], 'image') ){
+		if( ! $size || false === strpos($size['mime'], 'image') ){
 			$this->src = $this->opt->no_photo_url;
-			$img_str = $this->get_img_string( $this->src );
+			$img_str  = $this->get_img_string( $this->src );
+			$this->is_no_photo = true;
 		}
-		
+	
+		// изменим название файлов если картинка заглушка
+		if( $this->is_no_photo ){
+			$dest    = $this->add_stub_to_path( $dest );
+			$img_url = $this->add_stub_to_path( $img_url );
+		}
+//die( var_dump( $dest ) );			
 		# создаем миниатюру
 		# проверим наличие библиотеки Imagick
 		if( extension_loaded('imagick') ){
@@ -242,13 +278,17 @@ class Kama_Make_Thumb{
 	}
 	
 	private function get_img_string( $img_url ){
-		$img_string = $img_url;
+		$img_string = '';
 		
 		if( false !== strpos( $img_url, 'http' ) ){
 			// curl
 			if(0){}
-			elseif( ini_get('allow_url_fopen') ) {
-			   $img_string = file_get_contents( $img_url );
+			elseif( ini_get('allow_url_fopen') ){
+				$headers = get_headers( $img_url );
+				$status  = substr($headers[0], 9, 3);
+				
+				if( $status == 200 )
+					$img_string = @ file_get_contents( $img_url );
 			}
 			elseif( is_callable('curl_init') ){
 				$ch = curl_init( $img_url );
@@ -256,6 +296,11 @@ class Kama_Make_Thumb{
 				curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 				curl_setopt($ch, CURLOPT_BINARYTRANSFER, 1);
 				$img_string = curl_exec($ch);
+				
+				if( curl_getinfo($handle, CURLINFO_HTTP_CODE) != 200 ){
+					$img_string = '';
+				}
+				
 				curl_close($ch);
 			}
 			// пробуем получить по абсолютному пути
@@ -269,10 +314,10 @@ class Kama_Make_Thumb{
 				
 				$img_path = preg_replace('~^https?://[^/]+(/.*)$~', $root .'$1', $img_url );
 				if( file_exists( $img_path ) )
-					$img_string = file_get_contents( $img_path );
+					$img_string = @ file_get_contents( $img_path );
 			}
 		}
-		
+	//var_dump($img_string);	
 		return $img_string;
 	}
 
@@ -362,7 +407,7 @@ class Kama_Make_Thumb{
 		else {
 			imagejpeg( $thumb, $dest, $this->quality );
 		}
-		chmod( $dest, 0755 );
+		@ chmod( $dest, 0755 );
 		imagedestroy($image);
 		imagedestroy($thumb);
 		  

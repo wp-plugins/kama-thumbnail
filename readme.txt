@@ -1,5 +1,5 @@
 === Plugin Name ===
-Stable tag: 1.9.4
+Stable tag: 2.0
 Tested up to: 4.3.0
 Requires at least: 2.7
 License: GPLv2 or later
@@ -157,6 +157,10 @@ If you are themes developer, and need all it functionality, but you need to inst
 
 
 == Changelog ==
+= 2.0 =
+* Added: notice message when no image library instaled on server (GD or Imagic)
+* Added: diferent names for real thumb and nophoto thumb. And possibility to clear only nophoto thumbs from cache. All it needed to correctly create IMGs from external URLs (not selfhosted img) - sometimes it can't be loaded external imges properly.
+
 = 1.9.4 =
 * Fix: ext detection if img URL have querya rgs like <code>*.jpg?foo</code>
 

@@ -9,7 +9,7 @@ Description: Создает миниатюры постов на лету и к�
 __Plugin URI: http://wp-kama.ru/?p=142
 Text Domain: kama_thumbnail
 Domain Path: lang
-Version: 1.9.4
+Version: 2.0
 */
 
 define('KT_DIR', dirname(__FILE__) .'/' );
