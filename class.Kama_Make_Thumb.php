@@ -136,11 +136,11 @@ class Kama_Make_Thumb{
 	private function __is_allow_host( $url ){
 		$psrc = parse_url( $url );
 		$host = str_replace('www.', '', $psrc['host'] );
-
-		if( $host && ! in_array( $host, $this->opt->allow_hosts ) )
-			return false;
+		
+		if( $host && in_array( $host, $this->opt->allow_hosts ) )
+			return true;
 			
-		return true;
+		return false;
 	}
 
 	## Функция создает миниатюру. Возвращает УРЛ ссылку на миниатюру
@@ -169,7 +169,7 @@ class Kama_Make_Thumb{
 		$file_name = substr( md5($path), -9 ) ."_{$this->width}x{$this->height}_{$notcrop}.{$ext}";
 		$dest      = $this->opt->cache_folder . "/$file_name"; //файл миниатюры от корня сайта
 		$img_url   = rtrim( $this->opt->cache_folder_url, '/') ."/$file_name"; //ссылка на изображение;
-
+		
 		// если миниатюра уже есть, то возвращаем её
 		if( file_exists( $dest ) )
 			return $img_url;
@@ -191,18 +191,19 @@ class Kama_Make_Thumb{
 		if( ! $this->__is_allow_host( $this->src ) )
 			$this->src = $this->opt->no_photo_url;
 		
+		
 		// Если не удалось получить картинку: недоступный хост, файл пропал после переезда или еще чего.
 		// То для указаного УРЛ будет создана миниатюра из заглушки no_photo.png
 		// Чтобы после появления файла, миниатюра создалась правильно, нужно очистить кэш плагина.
 		$img_str = $this->get_img_string( $this->src );
-
+		
 		$size = $this->__getimagesizefromstring( $img_str );
-
+		
 		if( false === strpos($size['mime'], 'image') ){
 			$this->src = $this->opt->no_photo_url;
 			$img_str = $this->get_img_string( $this->src );
 		}
-
+		
 		# создаем миниатюру
 		# проверим наличие библиотеки Imagick
 		if( extension_loaded('imagick') ){
@@ -210,12 +211,16 @@ class Kama_Make_Thumb{
 			
 			return $img_url;
 		}
+		
 		# проверим наличие библиотеки GD
 		if( extension_loaded('gd') ){
 			$this->make_thumbnail_GD( $img_str, $this->width, $this->height, $dest, $this->notcrop );
 			
 			return $img_url;
 		}
+		
+		// выборосить заметку - библиотеки не установленны для обрботки
+		trigger_error('ERROR: There is no one of the Image libraries (GD or Imagick) installed on your server.', E_USER_NOTICE );
 
 		return false;
 	}
@@ -341,7 +346,7 @@ class Kama_Make_Thumb{
 
 		if( ! imagecopyresampled( $thumb, $image, 0, 0, $dx, $dy, $width, $height, $wsrc, $hsrc ) )
 			return false; // не удалось изменить размер
-		
+		//die( var_dump( $thumb ) );
 		// 
 		// Сохраняем картинку
 		if( $format == 'png'){		
