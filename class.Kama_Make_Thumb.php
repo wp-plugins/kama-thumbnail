@@ -62,7 +62,6 @@ class Kama_Make_Thumb{
 	
 	private $args;
 	private $opt;	
-	private $is_no_photo = false;	
 	
 	function __construct( $args = array() ){
 		$this->opt = class_exists('Kama_Thumbnail') ? Kama_Thumbnail::$opt : $GLOBALS['kt_opt'];
@@ -167,16 +166,14 @@ class Kama_Make_Thumb{
 		if( $this->src == 'no_photo'){
 			if( $this->no_stub )
 				return false;
-			else{
+			else
 				$this->src = $this->opt->no_photo_url;
-				$this->is_no_photo = true;
-			}
 		}
 		
-		$_src = parse_url( $this->src );
+		$path = parse_url( $this->src, PHP_URL_PATH );
 		
 		// картинка не определена
-		if( ! $path = $_src['path'] ) return false;
+		if( ! $path ) return false;
 		
 		preg_match('~(?<=\.)[a-z]+$~i', $path, $m );
 		$ext       = $m[0] ? $m[0] : 'png';
@@ -185,13 +182,7 @@ class Kama_Make_Thumb{
 		$file_name = substr( md5($path), -9 ) ."_{$this->width}x{$this->height}{$notcrop}.{$ext}";
 		$dest      = $this->opt->cache_folder . "/$file_name"; //файл миниатюры от корня сайта
 		$img_url   = rtrim( $this->opt->cache_folder_url, '/') ."/$file_name"; //ссылка на изображение;
-		
-		// изменим название файлов если картинка заглушка
-		if( $this->is_no_photo ){
-			$dest    = $this->add_stub_to_path( $dest );
-			$img_url = $this->add_stub_to_path( $img_url );
-		}
-		
+				
 		// если миниатюра уже есть, то возвращаем её
 		if( file_exists( $dest ) )
 			return $img_url;
@@ -202,7 +193,8 @@ class Kama_Make_Thumb{
 		
 		
 		// once ------------------------------------------------------
-		//$err_msg = '';
+
+		$is_no_photo = false;
 		
 		if( ! $this->__cache_folder_check() ){
 			if( class_exists('Kama_Thumbnail') )
@@ -216,8 +208,8 @@ class Kama_Make_Thumb{
 			$this->src = home_url() . $this->src;
 		
 		if( ! $this->__is_allow_host( $this->src ) ){
-			$this->src = $this->opt->no_photo_url;
-			$this->is_no_photo = true;
+			$this->src   = $this->opt->no_photo_url;
+			$is_no_photo = true;
 
 		}
 		
@@ -229,17 +221,17 @@ class Kama_Make_Thumb{
 		$size = $this->__getimagesizefromstring( $img_str );
 		
 		if( ! $size || false === strpos($size['mime'], 'image') ){
-			$this->src = $this->opt->no_photo_url;
-			$img_str  = $this->get_img_string( $this->src );
-			$this->is_no_photo = true;
+			$this->src   = $this->opt->no_photo_url;
+			$img_str     = $this->get_img_string( $this->src );
+			$is_no_photo = true;
 		}
 	
-		// изменим название файлов если картинка заглушка
-		if( $this->is_no_photo ){
+		// Изменим название файла если это картинка заглушка
+		if( $is_no_photo ){
 			$dest    = $this->add_stub_to_path( $dest );
 			$img_url = $this->add_stub_to_path( $img_url );
 		}
-//die( var_dump( $dest ) );			
+
 		# создаем миниатюру
 		# проверим наличие библиотеки Imagick
 		if( extension_loaded('imagick') ){
